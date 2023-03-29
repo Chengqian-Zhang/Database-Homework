@@ -176,7 +176,7 @@ CREATE TABLE comment_tb
     belong_moment_id BIGINT NOT NULL,
     id_of_the_comment_user BIGINT NOT NULL,
     PRIMARY KEY(id, belong_moment_id),
-    CONSTRAINT belong_fk_moment_id FOREIGN KEY(belong_moment_id) REFERENCES moment_tb(id)
+    CONSTRAINT comment_belong_fk_moment_id FOREIGN KEY(belong_moment_id) REFERENCES moment_tb(id),
     CONSTRAINT comment_fk_user_id FOREIGN KEY(id_of_the_comment_user) REFERENCES user_tb(id)
 );
 
@@ -195,7 +195,7 @@ CREATE TABLE liked_tb
     belong_moment_id BIGINT NOT NULL,
     id_of_the_liked_user BIGINT NOT NULL,
     PRIMARY KEY(id, belong_moment_id),
-    CONSTRAINT belong_fk_moment_id FOREIGN KEY(belong_moment_id) REFERENCES moment_tb(id)
+    CONSTRAINT liked_belong_fk_moment_id FOREIGN KEY(belong_moment_id) REFERENCES moment_tb(id),
     CONSTRAINT liked_fk_user_id FOREIGN KEY(id_of_the_liked_user) REFERENCES user_tb(id)
 );
 
@@ -216,7 +216,7 @@ CREATE TABLE trans_tb
     belong_moment_id BIGINT NOT NULL,
     id_of_the_trans_user BIGINT NOT NULL,
     PRIMARY KEY(id, belong_moment_id),
-    CONSTRAINT belong_fk_moment_id FOREIGN KEY(belong_moment_id) REFERENCES moment_tb(id)
+    CONSTRAINT trans_belong_fk_moment_id FOREIGN KEY(belong_moment_id) REFERENCES moment_tb(id),
     CONSTRAINT trans_bk_user_id FOREIGN KEY(id_of_the_trans_user) REFERENCES user_tb(id)
 );
 
