@@ -140,3 +140,84 @@ CREATE TABLE song_belongs_to_song_list_tb
 );
 
 SET @@foreign_key_checks=1;
+
+-- 9. 创建动态表。动态与用户的创建关系为一对多关系，因而需要指明创建的用户的id
+-- (id_of_the_moment_creating_user)和发布动态的时间（creating_time）
+
+SET @@foreign_key_checks=0;
+
+DROP TABLE IF EXISTS moment_tb;
+
+CREATE TABLE moment_tb
+(
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    content VARCHAR(255) NOT NULL,
+    range_of_share VARCHAR(20) NULL DEFAULT '所有人可见',
+    id_of_the_moment_creating_user BIGINT NOT NULL,
+    creating_time TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    CHECK(range_of_share IN ('所有人可见', '粉丝可见', '自己可见')),
+    CONSTRAINT moment_fk_create_list FOREIGN KEY(id_of_the_moment_creating_user) REFERENCES user_tb(id)
+);
+
+SET @@foreign_key_checks=1;
+
+-- 10. 创建评论表。id是分辨符，belong_moment_id是强实体的主码。
+-- “发送评论”是一对多联系，id_of_the_comment_user是对应的外码
+
+SET @@foreign_key_checks=0;
+
+DROP TABLE IF EXISTS comment_tb;
+
+CREATE TABLE comment_tb
+(
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    time_of_comment TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    content VARCHAR(255) NOT NULL,
+    belong_moment_id BIGINT NOT NULL,
+    id_of_the_comment_user BIGINT NOT NULL,
+    PRIMARY KEY(id, belong_moment_id),
+    CONSTRAINT belong_fk_moment_id FOREIGN KEY(belong_moment_id) REFERENCES moment_tb(id)
+    CONSTRAINT comment_fk_user_id FOREIGN KEY(id_of_the_comment_user) REFERENCES user_tb(id)
+);
+
+SET @@foreign_key_checks=1;
+
+-- 11. 创建点赞表。id是分辨符，belong_moment_id是强实体的主码。
+-- “发送点赞”是一对多联系，id_of_the_liked_user是对应的外码
+
+SET @@foreign_key_checks=0;
+
+DROP TABLE IF EXISTS liked_tb;
+
+CREATE TABLE liked_tb
+(
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    belong_moment_id BIGINT NOT NULL,
+    id_of_the_liked_user BIGINT NOT NULL,
+    PRIMARY KEY(id, belong_moment_id),
+    CONSTRAINT belong_fk_moment_id FOREIGN KEY(belong_moment_id) REFERENCES moment_tb(id)
+    CONSTRAINT liked_fk_user_id FOREIGN KEY(id_of_the_liked_user) REFERENCES user_tb(id)
+);
+
+SET @@foreign_key_checks=1;
+
+-- 12. 创建转发表。id是分辨符，belong_moment_id是强实体的主码。
+-- “进行转发”是一对多联系，id_of_the_trans_user是对应的外码
+
+SET @@foreign_key_checks=0;
+
+DROP TABLE IF EXISTS trans_tb;
+
+CREATE TABLE trans_tb
+(
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    time_of_trans TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    content VARCHAR(255) NOT NULL,
+    belong_moment_id BIGINT NOT NULL,
+    id_of_the_trans_user BIGINT NOT NULL,
+    PRIMARY KEY(id, belong_moment_id),
+    CONSTRAINT belong_fk_moment_id FOREIGN KEY(belong_moment_id) REFERENCES moment_tb(id)
+    CONSTRAINT trans_bk_user_id FOREIGN KEY(id_of_the_trans_user) REFERENCES user_tb(id)
+);
+
+SET @@foreign_key_checks=1;
