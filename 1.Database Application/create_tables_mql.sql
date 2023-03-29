@@ -8,28 +8,47 @@
 
 -- # 实体
 
--- # 用户（网易云ID，登陆方式、会员等级、昵称）
+-- -- 1. 创建用户表，并检查qq，邮箱，电话之一是否有填写，并检查填写是否合规。
 set @@foreign_key_checks=0;
 drop table if exists user_tb
+-- CREATE TABLE user_tb
+-- {
+--   user_id BIGINT NOT NULL PRIMARY KEY,
+--   user_nickname VARCHAR(100) NOT NULL,
+--   user_level INT,
+--   user_login ENUM('wechat','qq','phone') NOT NULL,
+-- --   check(user_login in (`wechat`,`phone`,`qq`,`email`))
+-- }
 CREATE TABLE user_tb
-{
-  user_id BIGINT NOT NULL PRIMARY KEY,
-  user_nickname VARCHAR(100) NOT NULL,
-  user_level INT,
-  user_login ENUM('wechat','qq','phone') NOT NULL,
---   check(user_login in (`wechat`,`phone`,`qq`,`email`))
-}
+(
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    level_of_membership TINYINT NULL DEFAULT 1,
+    user_phone VARCHAR(20) NULL,
+    qq BIGINT NULL,
+    mail VARCHAR(40) NULL,
+    nickname VARCHAR(40) NOT NULL,
+    CHECK(LENGTH(user_phone)=11 OR user_phone IS NULL),
+    CHECK(
+        mail LIKE '%@%' 
+        OR mail IS NULL
+    ),
+    CHECK(
+        user_phone IS NOT NULL OR
+        mail IS NOT NULL OR
+        qq IS NOT NULL
+    )
+);
 set @@foreign_key_checks=1;
 
--- # 音乐（音乐ID）+属于专辑（一对多）+名称
+-- # 2.音乐（音乐ID,音乐名称）+属于专辑（一对多
 set @@foreign_key_checks=0;
 drop table if exists music_tb
 CREATE TABLE music_tb
 {
-    music_id BIGINT NOT NULL  PRIMARY KEY,
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     music_name VARCHAR(50) NOT NULL,
     belong_album_id VARCHAR(50),
-    constraint fk_music_album foreign key(belong_album_id) references album_tb(album_id)
+    constraint music_fk_album foreign key(belong_album_id) references album_tb(album_id)
 }
 set @@foreign_key_checks=1;
 
@@ -42,7 +61,7 @@ CREATE TABLE singer_tb
     singer_name VARCHAR(50) NOT NULL,
     singer_district VARCHAR(50) NOT NULL,
     singer_style VARCHAR(50) NOT NULL,
-    constraint fk_singer_user foreign key(siner_id) references user_tb(user_id)
+    constraint singer_fk_user foreign key(siner_id) references user_tb(id)
 }
 set @@foreign_key_checks=1;
 
@@ -51,7 +70,7 @@ set @@foreign_key_checks=0;
 drop table if exists album_tb
 CREATE TABLE album_tb
 {
-    album_id BIGINT NOT NULL  PRIMARY KEY
+    album_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY
     -- 增加专辑名称
     album_name VARCHAR(50) NOT NULL
     
@@ -69,8 +88,8 @@ CREATE TABLE follow_tb
     publisher_id BIGINT NOT NULL,
     follow_time DATE,
     primary key(subscriber_id,publisher_id),
-    constraint fk_sub_user foreign key(subscriber_id) references user_tb(user_id)
-    constraint fk_pub_user foreign key(publisher_id) references user_tb(user_id)
+    constraint sub_fk_user foreign key(subscriber_id) references user_tb(id)
+    constraint pub_fk_user foreign key(publisher_id) references user_tb(id)
 }
 set @@foreign_key_checks=1;
 
@@ -86,8 +105,8 @@ CREATE TABLE play_tb
     play_order ENUM('Order','Random') NOT NULL,
     -- 是否加入评论时间？
     primary key(player_id,played_music),
-    constraint fk_play_user foreign key(player_id) references user_tb(user_id)
-    constraint fkplay_music foreign key(played_music) references music_tb(music_id)
+    constraint play_fk_user foreign key(player_id) references user_tb(id)
+    constraint play_fk_music foreign key(played_music) references music_tb(id)
 }
 set @@foreign_key_checks=1;
 -- # 评论（用户ID，音乐ID，评论内容）//？？要不要加时间
@@ -101,8 +120,8 @@ CREATE TABLE comment_tb
     comment_time DATE,
     -- 加入评论时间？
     primary key(commentator_id,commented_music),
-    constraint fk_comment_user foreign key(commentator_id) references user_tb(user_id)
-    constraint fk_comment_music foreign key(commented_music) references music_tb(music_id)
+    constraint comment_fk_user foreign key(commentator_id) references user_tb(id)
+    constraint comment_fk_music foreign key(commented_music) references music_tb(id)
 }
 set @@foreign_key_checks=1;
 
@@ -114,8 +133,8 @@ CREATE TABLE like_tb
     liker_id BIGINT NOT NULL,
     liked_music BIGINT NOT NULL,
     primary key(liker_id,liked_music),
-    constraint fk_like_user foreign key(liker_id) references user_tb(user_id)
-    constraint fk_like_music foreign key(liked_music) references music_tb(music_id)
+    constraint like_fk_user foreign key(liker_id) references user_tb(id)
+    constraint like_fk_music foreign key(liked_music) references music_tb(id)
 }
 set @@foreign_key_checks=1;
 
@@ -127,8 +146,8 @@ CREATE TABLE produce_tb
     producer_id BIGINT NOT NULL,
     produced_music BIGINT NOT NULL,
     primary key(producer_id,produced_music),
-    constraint fk_produce_user foreign key(producer_id) references singer_tb(singer_id)
-    constraint fk_produce_music foreign key(produced_music) references music_tb(music_id)
+    constraint produce_fk_user foreign key(producer_id) references singer_tb(singer_id)
+    constraint produce_fk_music foreign key(produced_music) references music_tb(id)
 }
 set @@foreign_key_checks=1;
 
@@ -141,8 +160,8 @@ CREATE TABLE release_tb
     released_album BIGINT NOT NULL,
     release_time DATE,
     primary key(releaser_id,released_album),
-    constraint fk_release_user foreign key(releaser_id) references user_tb(user_id)
-    constraint fk_release_album foreign key(released_album) references album_tb(album_id)
+    constraint release_fk_user foreign key(releaser_id) references user_tb(id)
+    constraint release_fk_album foreign key(released_album) references album_tb(album_id)
 }
 set @@foreign_key_checks=1;
 
