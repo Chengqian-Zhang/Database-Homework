@@ -24,7 +24,21 @@ INSERT INTO user_tb (
     4, 'testing@163.com', '王五'
 );
 
--- 2. 创建私信表。
+INSERT INTO user_tb (
+    level_of_membership, 
+    user_phone, 
+    nickname
+) VALUES (
+    5, '15530616876', '小北'
+);
+
+-- 2. 创建歌手表
+INSERT INTO singer_tb(singer_id,singer_name,singer_district,singer_style) 
+    VALUES (3,'Mili','日本','电子音乐');
+INSERT INTO singer_tb(singer_id,singer_name,singer_district,singer_style) 
+    VALUES (4,'北大学子','北京','经典');
+
+-- 3. 创建私信表。
 
 INSERT INTO private_message_tb (
     content,
@@ -55,15 +69,64 @@ INSERT INTO private_message_tb (
     3,
     1
 );
+-- 4. 创建专辑表。
+INSERT INTO album_tb(album_id,album_name)VALUES(1,'百大金曲');
+INSERT INTO album_tb(album_id,album_name)VALUES(2,'Miracle Milk');
 
--- 3. 创建音乐表。
+-- 5. 创建音乐表。
 
-INSERT INTO music_tb (id) VALUES (1);
-INSERT INTO music_tb (id) VALUES (2);
-INSERT INTO music_tb (id) VALUES (3);
-INSERT INTO music_tb (id) VALUES (4);
+INSERT INTO music_tb (id,music_name,belong_album_id) 
+    VALUES (1,'world.execute(me);',2);
+INSERT INTO music_tb (id,music_name) 
+    VALUES (2,'Creeper?');
+INSERT INTO music_tb (id,music_name,belong_album_id) 
+    VALUES (3,'清华大学校歌',1);
+INSERT INTO music_tb (id,music_name)
+    VALUES (4,'heal the world');
+INSERT INTO music_tb (id,music_name,belong_album_id)
+    VALUES (5,'只因你太美',1);
 
--- 4. 创建歌曲表。
+
+
+-- 6. 歌手制作音乐
+INSERT INTO produce_tb(producer_id,produced_music)VALUES(3,1);
+INSERT INTO produce_tb(producer_id,produced_music)VALUES(3,2);
+INSERT INTO produce_tb(producer_id,produced_music)VALUES(4,3);
+INSERT INTO produce_tb(producer_id,produced_music)VALUES(3,4);
+INSERT INTO produce_tb(producer_id,produced_music)VALUES(4,5);
+
+-- 7. 歌手发布专辑
+INSERT INTO release_tb(releaser_id,released_album,release_time)
+    VALUES(4,1,'2023-04-01');
+INSERT INTO release_tb(releaser_id,released_album,release_time)
+    VALUES(3,2,'2016-10-12');
+
+-- 8. 创建播放表
+INSERT INTO play_tb(player_id,played_music,play_state,play_order)
+    VALUES(1,1,'Pause','Order');
+INSERT INTO play_tb(player_id,played_music,play_state,play_order)
+    VALUES(1,2,'Start','Order');
+INSERT INTO play_tb(player_id,played_music,play_state,play_order)
+    VALUES(2,1,'Start','Random');
+INSERT INTO play_tb(player_id,played_music,play_state,play_order)
+    VALUES(2,5,'Pause','Order');
+INSERT INTO play_tb(player_id,played_music,play_state,play_order)
+    VALUES(3,3,'Pause','Random');
+INSERT INTO play_tb(player_id,played_music,play_state,play_order)
+    VALUES(3,4,'Start','Order');
+INSERT INTO play_tb(player_id,played_music,play_state,play_order)
+    VALUES(4,3,'Start','Order');
+
+-- 9. 创建评论表
+INSERT INTO comment_music_tb(commentator_id,commented_music,comment_content)
+    VALUES(2,1,'这首歌的主题是计算机编程和模拟,通过使用编程术语和比喻来描述关系和情感。歌词中提到了对象创建、初始化和模拟等编程术语,同时也包含了对情感和关系的描绘,表达了在虚拟世界中寻求满足和幸福的渴望。这句话是ChatGPT回答的。');
+INSERT INTO comment_music_tb(commentator_id,commented_music,comment_content)
+    VALUES(4,3,'还是我大PKU的燕园情好听。');
+INSERT INTO comment_music_tb(commentator_id,commented_music,comment_content)
+    VALUES(3,5,'巅峰产生虚伪的拥护,黄昏见证虔诚的信徒!');
+        
+
+-- 11. 创建歌曲表。
 
 INSERT INTO song_tb (
     song_music_id,
@@ -89,7 +152,14 @@ INSERT INTO song_tb (
     '清华大学校歌'
 );
 
--- 5. 创建MV表。
+INSERT INTO song_tb (
+    song_music_id,
+    name
+) VALUES (
+    5,
+    '只因你太美'
+);
+-- 12. 创建MV表。
 
 INSERT INTO mv_tb (
     mv_music_id,
@@ -98,8 +168,7 @@ INSERT INTO mv_tb (
     4,
     'heal the world'
 );
-
--- 6. 创建歌单表。
+-- 13. 创建歌单表。
 
 INSERT INTO song_list_tb (
     title,
@@ -125,7 +194,7 @@ INSERT INTO song_list_tb (
     3
 );
 
--- 7. 创建收藏表。
+-- 14. 创建收藏表。
 
 INSERT INTO collect_tb (
     collect_user_id,
@@ -159,7 +228,7 @@ INSERT INTO collect_tb (
     3
 );
 
--- 8. 创建标识歌单属于关系的表。
+-- 15. 创建标识歌单属于关系的表。
 
 INSERT INTO song_belongs_to_song_list_tb (
     belong_music_id,
@@ -217,7 +286,7 @@ INSERT INTO song_belongs_to_song_list_tb (
     3
 );
 
--- 9. 创建动态表。
+-- 16. 创建动态表。
 
 INSERT INTO moment_tb (
     content, 
@@ -242,7 +311,7 @@ INSERT INTO moment_tb (
     '许嵩又出新专辑', 3
 );
 
--- 10. 创建评论表。
+-- 17. 创建评论表。
 
 INSERT INTO comment_tb (
     content,
@@ -274,7 +343,7 @@ INSERT INTO comment_tb (
     3
 );
 
--- 11. 创建点赞表。
+-- 18. 创建点赞表。
 
 INSERT INTO liked_tb (
     belong_moment_id,
@@ -308,7 +377,7 @@ INSERT INTO liked_tb (
     2
 );
 
--- 12. 创建转发表。
+-- 19. 创建转发表。
 
 INSERT INTO trans_tb (
     content,
