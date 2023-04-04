@@ -129,8 +129,8 @@ set @@foreign_key_checks=1;
 
 -- 9. 创建评论表，记录不同用户对不同音乐的评论
 set @@foreign_key_checks=0;
-drop table if exists comment_tb;
-CREATE TABLE comment_tb
+drop table if exists comment_music_tb;
+CREATE TABLE comment_music_tb
 (
     commentator_id BIGINT NOT NULL,
     commented_music BIGINT NOT NULL,
