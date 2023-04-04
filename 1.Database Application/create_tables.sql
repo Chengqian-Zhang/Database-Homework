@@ -104,7 +104,7 @@ CREATE TABLE release_tb
 (
     releaser_id BIGINT NOT NULL,
     released_album BIGINT NOT NULL,
-    release_time DATETIME,
+    release_time DATE,
     primary key(releaser_id,released_album),
     constraint release_fk_user foreign key(releaser_id) references user_tb(id),
     constraint release_fk_album foreign key(released_album) references album_tb(album_id)
