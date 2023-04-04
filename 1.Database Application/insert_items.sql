@@ -222,7 +222,7 @@ INSERT INTO song_belongs_to_song_list_tb (
 INSERT INTO moment_tb (
     content, 
     range_of_share, 
-    id_of_the_moment_creating_user,
+    id_of_the_moment_creating_user
 ) VALUES (
     '今天去家园食堂吃了鸡腿饭', '粉丝可见', 1
 );
@@ -230,14 +230,14 @@ INSERT INTO moment_tb (
 INSERT INTO moment_tb (
     content, 
     range_of_share, 
-    id_of_the_moment_creating_user,
+    id_of_the_moment_creating_user
 ) VALUES (
     '2023考研冲冲冲', '自己可见', 1
 );
 
 INSERT INTO moment_tb (
     content, 
-    id_of_the_moment_creating_user,
+    id_of_the_moment_creating_user
 ) VALUES (
     '许嵩又出新专辑', 3
 );
@@ -247,7 +247,7 @@ INSERT INTO moment_tb (
 INSERT INTO comment_tb (
     content,
     belong_moment_id,
-    id_of_the_comment_user,
+    id_of_the_comment_user
 ) VALUES (
     '家园的鸡排饭也很不错',
     1,
@@ -257,7 +257,7 @@ INSERT INTO comment_tb (
 INSERT INTO comment_tb (
     content,
     belong_moment_id,
-    id_of_the_comment_user,
+    id_of_the_comment_user
 ) VALUES (
     '考研加油',
     2,
@@ -267,7 +267,7 @@ INSERT INTO comment_tb (
 INSERT INTO comment_tb (
     content,
     belong_moment_id,
-    id_of_the_comment_user,
+    id_of_the_comment_user
 ) VALUES (
     '许嵩粉丝报道',
     3,
@@ -278,7 +278,7 @@ INSERT INTO comment_tb (
 
 INSERT INTO liked_tb (
     belong_moment_id,
-    id_of_the_liked_user,
+    id_of_the_liked_user
 ) VALUES (
     1,
     2
@@ -286,7 +286,7 @@ INSERT INTO liked_tb (
 
 INSERT INTO liked_tb (
     belong_moment_id,
-    id_of_the_liked_user,
+    id_of_the_liked_user
 ) VALUES (
     2,
     3
@@ -294,7 +294,7 @@ INSERT INTO liked_tb (
 
 INSERT INTO liked_tb (
     belong_moment_id,
-    id_of_the_liked_user,
+    id_of_the_liked_user
 ) VALUES (
     3,
     1
@@ -302,7 +302,7 @@ INSERT INTO liked_tb (
 
 INSERT INTO liked_tb (
     belong_moment_id,
-    id_of_the_liked_user,
+    id_of_the_liked_user
 ) VALUES (
     2,
     2
@@ -313,7 +313,7 @@ INSERT INTO liked_tb (
 INSERT INTO trans_tb (
     content,
     belong_moment_id,
-    id_of_the_trans_user,
+    id_of_the_trans_user
 ) VALUES (
     '我们也去家园吃饭吧',
     1,
@@ -323,7 +323,7 @@ INSERT INTO trans_tb (
 INSERT INTO trans_tb (
     content,
     belong_moment_id,
-    id_of_the_trans_user,
+    id_of_the_trans_user
 ) VALUES (
     '看看当代大学生内卷的现状吧',
     2,
@@ -333,7 +333,7 @@ INSERT INTO trans_tb (
 INSERT INTO trans_tb (
     content,
     belong_moment_id,
-    id_of_the_trans_user,
+    id_of_the_trans_user
 ) VALUES (
     '姐妹们我买好票了',
     3,

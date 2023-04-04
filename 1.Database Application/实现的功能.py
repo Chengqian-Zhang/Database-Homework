@@ -111,10 +111,10 @@ except:
 
 
 # 4. 按昵称查找用户
-sql = "SELECT * FROM students WHERE nickame= %s "
+sql = "SELECT * FROM user_tb WHERE nickname LIKE %s"
 
 try:
-    cursor.execute(sql，('李四'，))
+    cursor.execute(sql, ("李四", ))
     print('Results:', cursor.fetchall())
 except:
     print('Error')
