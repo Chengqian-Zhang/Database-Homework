@@ -142,18 +142,18 @@ CREATE TABLE comment_tb
     constraint comment_fk_music foreign key(commented_music) references music_tb(id)
 );
 set @@foreign_key_checks=1;
--- 10. 创建喜欢表，记录不同用户对不同音乐的喜欢
-set @@foreign_key_checks=0;
-drop table if exists like_tb;
-CREATE TABLE like_tb
-(
-    liker_id BIGINT NOT NULL,
-    liked_music BIGINT NOT NULL,
-    primary key(liker_id,liked_music),
-    constraint like_fk_user foreign key(liker_id) references user_tb(id),
-    constraint like_fk_music foreign key(liked_music) references music_tb(id)
-);
-set @@foreign_key_checks=1;
+-- 10. 创建喜欢表，记录不同用户对不同音乐的喜欢 **考虑删去**
+-- set @@foreign_key_checks=0;
+-- drop table if exists like_tb;
+-- CREATE TABLE like_tb
+-- (
+--     liker_id BIGINT NOT NULL,
+--     liked_music BIGINT NOT NULL,
+--     primary key(liker_id,liked_music),
+--     constraint like_fk_user foreign key(liker_id) references user_tb(id),
+--     constraint like_fk_music foreign key(liked_music) references music_tb(id)
+-- );
+-- set @@foreign_key_checks=1;
 
 
 -- 11. 创建歌曲表，歌曲继承自音乐，需要以音乐的id(music_id)为主键。
