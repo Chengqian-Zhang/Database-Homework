@@ -25,8 +25,22 @@ CREATE TABLE user_tb
 );
 
 SET @@foreign_key_checks=1;
+-- 2. 创建歌手表，包括用户ID（歌手继承用户，以用户id(music_id)为主键），歌手姓名，所在地区和风格
 
--- 2. 创建私信表，私信和用户间的“收到”和“发送”关系是一对多关系，需要在表中填写对应的用户id
+set @@foreign_key_checks=0;
+drop table if exists singer_tb;
+CREATE TABLE singer_tb
+(
+    singer_id BIGINT NOT NULL PRIMARY KEY,
+    singer_name VARCHAR(50) NOT NULL,
+    singer_district VARCHAR(50) NOT NULL,
+    singer_style VARCHAR(50) NOT NULL,
+    constraint singer_fk_user foreign key(singer_id) references user_tb(id)
+);
+set @@foreign_key_checks=1;
+
+
+-- 3. 创建私信表，私信和用户间的“收到”和“发送”关系是一对多关系，需要在表中填写对应的用户id
 SET @@foreign_key_checks=0;
 
 DROP TABLE IF EXISTS private_message_tb;
@@ -44,20 +58,105 @@ CREATE TABLE private_message_tb
 
 SET @@foreign_key_checks=1;
 
--- 3. 创建音乐表，功能尚未完成。
+-- 4. 创建专辑表，包括专辑ID和专辑名称
+set @@foreign_key_checks=0;
+drop table if exists album_tb;
+CREATE TABLE album_tb
+(
+    album_id BIGINT NOT NULL PRIMARY KEY,
+    -- 增加专辑名称
+    album_name VARCHAR(50) NOT NULL
+    
+);
+set @@foreign_key_checks=1;
 
-SET @@foreign_key_checks=0;
+-- 5. 创建音乐表，包括音乐id、音乐名称和所属专辑（如果有）（因专辑和音乐一对多的联系而在此添加）
 
-DROP TABLE IF EXISTS music_tb;
-
+set @@foreign_key_checks=0;
+drop table if exists music_tb;
 CREATE TABLE music_tb
 (
-    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY
+    id BIGINT NOT NULL PRIMARY KEY,
+    music_name VARCHAR(50) NOT NULL,
+    belong_album_id BIGINT,
+    constraint music_fk_album foreign key(belong_album_id) references album_tb(album_id)
 );
+set @@foreign_key_checks=1;
 
-SET @@foreign_key_checks=1;
+-- 6. 创建音乐制作表，记录歌手制作音乐的状况
+set @@foreign_key_checks=0;
+drop table if exists produce_tb;
+CREATE TABLE produce_tb
+(
+    producer_id BIGINT NOT NULL,
+    produced_music BIGINT NOT NULL,
+    primary key(producer_id,produced_music),
+    constraint produce_fk_user foreign key(producer_id) references singer_tb(singer_id),
+    constraint produce_fk_music foreign key(produced_music) references music_tb(id)
+);
+set @@foreign_key_checks=1;
 
--- 4. 创建歌曲表，歌曲继承自音乐，需要以音乐的id(music_id)为主键。
+-- 7. 创建专辑制作表，记录歌手发布专辑的状况
+
+set @@foreign_key_checks=0;
+drop table if exists release_tb;
+CREATE TABLE release_tb
+(
+    releaser_id BIGINT NOT NULL,
+    released_album BIGINT NOT NULL,
+    release_time DATETIME,
+    primary key(releaser_id,released_album),
+    constraint release_fk_user foreign key(releaser_id) references user_tb(id),
+    constraint release_fk_album foreign key(released_album) references album_tb(album_id)
+);
+set @@foreign_key_checks=1;
+
+
+-- 8. 创建播放表，记录不同用户对不同音乐的播放状态
+set @@foreign_key_checks=0;
+drop table if exists play_tb;
+CREATE TABLE play_tb
+(
+    player_id BIGINT NOT NULL,
+    played_music BIGINT NOT NULL,
+    play_state ENUM('Pause','Start') NOT NULL,
+    play_order ENUM('Order','Random') NOT NULL,
+    primary key(player_id,played_music),
+    constraint play_fk_user foreign key(player_id) references user_tb(id),
+    constraint play_fk_music foreign key(played_music) references music_tb(id)
+);
+set @@foreign_key_checks=1;
+
+-- 9. 创建评论表，记录不同用户对不同音乐的评论
+set @@foreign_key_checks=0;
+drop table if exists comment_tb;
+CREATE TABLE comment_tb
+(
+    commentator_id BIGINT NOT NULL,
+    commented_music BIGINT NOT NULL,
+    comment_content VARCHAR(500) NOT NULL,
+    -- 加入评论时间？
+    comment_time DATETIME,
+    primary key(commentator_id,commented_music),
+    constraint comment_fk_user foreign key(commentator_id) references user_tb(id),
+    constraint comment_fk_music foreign key(commented_music) references music_tb(id)
+);
+set @@foreign_key_checks=1;
+-- 10. 创建喜欢表，记录不同用户对不同音乐的喜欢
+set @@foreign_key_checks=0;
+drop table if exists like_tb;
+CREATE TABLE like_tb
+(
+    liker_id BIGINT NOT NULL,
+    liked_music BIGINT NOT NULL,
+    primary key(liker_id,liked_music),
+    constraint like_fk_user foreign key(liker_id) references user_tb(id),
+    constraint like_fk_music foreign key(liked_music) references music_tb(id)
+);
+set @@foreign_key_checks=1;
+
+
+-- 11. 创建歌曲表，歌曲继承自音乐，需要以音乐的id(music_id)为主键。
 
 SET @@foreign_key_checks=0;
 
@@ -72,7 +171,7 @@ CREATE TABLE song_tb
 
 SET @@foreign_key_checks=1;
 
--- 5. 创建MV表，MV继承自音乐，需要以音乐的id(music_id)为主键。
+-- 12. 创建MV表，MV继承自音乐，需要以音乐的id(music_id)为主键。
 
 SET @@foreign_key_checks=0;
 
@@ -87,7 +186,7 @@ CREATE TABLE mv_tb
 
 SET @@foreign_key_checks=1;
 
--- 6. 创建歌单表。歌单与用户的创建关系为一对多关系，因而需要指明创建的用户的id
+-- 13. 创建歌单表。歌单与用户的创建关系为一对多关系，因而需要指明创建的用户的id
 -- (id_of_the_creating_user)和创造的时间(cerating_time)
 
 SET @@foreign_key_checks=0;
@@ -107,7 +206,7 @@ CREATE TABLE song_list_tb
 
 SET @@foreign_key_checks=1;
 
--- 7. 创建收藏表。收藏关系是用户和歌单的多对多关系，主键为用户id(user_id)和歌单id(song_list_id)。
+-- 14. 创建收藏表。收藏关系是用户和歌单的多对多关系，主键为用户id(user_id)和歌单id(song_list_id)。
 
 SET @@foreign_key_checks=0;
 
@@ -124,7 +223,7 @@ CREATE TABLE collect_tb
 
 SET @@foreign_key_checks=1;
 
--- 8. 创建歌曲歌单表标识歌曲和歌单之间的属于关系。这个关系是多对多关系，需要以歌曲id(music_id)和歌单id(song_list_id)为主键
+-- 15. 创建歌曲歌单表标识歌曲和歌单之间的属于关系。这个关系是多对多关系，需要以歌曲id(music_id)和歌单id(song_list_id)为主键
 
 SET @@foreign_key_checks=0;
 
@@ -141,7 +240,7 @@ CREATE TABLE song_belongs_to_song_list_tb
 
 SET @@foreign_key_checks=1;
 
--- 9. 创建动态表。动态与用户的创建关系为一对多关系，因而需要指明创建的用户的id
+-- 16. 创建动态表。动态与用户的创建关系为一对多关系，因而需要指明创建的用户的id
 -- (id_of_the_moment_creating_user)和发布动态的时间（creating_time）
 
 SET @@foreign_key_checks=0;
@@ -161,7 +260,7 @@ CREATE TABLE moment_tb
 
 SET @@foreign_key_checks=1;
 
--- 10. 创建评论表。id是分辨符，belong_moment_id是强实体的主码。
+-- 17. 创建评论表。id是分辨符，belong_moment_id是强实体的主码。
 -- “发送评论”是一对多联系，id_of_the_comment_user是对应的外码
 
 SET @@foreign_key_checks=0;
@@ -182,7 +281,7 @@ CREATE TABLE comment_tb
 
 SET @@foreign_key_checks=1;
 
--- 11. 创建点赞表。id是分辨符，belong_moment_id是强实体的主码。
+-- 18. 创建点赞表。id是分辨符，belong_moment_id是强实体的主码。
 -- “发送点赞”是一对多联系，id_of_the_liked_user是对应的外码
 
 SET @@foreign_key_checks=0;
@@ -201,7 +300,7 @@ CREATE TABLE liked_tb
 
 SET @@foreign_key_checks=1;
 
--- 12. 创建转发表。id是分辨符，belong_moment_id是强实体的主码。
+-- 19. 创建转发表。id是分辨符，belong_moment_id是强实体的主码。
 -- “进行转发”是一对多联系，id_of_the_trans_user是对应的外码
 
 SET @@foreign_key_checks=0;
@@ -221,3 +320,5 @@ CREATE TABLE trans_tb
 );
 
 SET @@foreign_key_checks=1;
+
+-- 12+7=19
