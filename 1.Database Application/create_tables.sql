@@ -135,8 +135,6 @@ CREATE TABLE comment_tb
     commentator_id BIGINT NOT NULL,
     commented_music BIGINT NOT NULL,
     comment_content VARCHAR(500) NOT NULL,
-    -- 加入评论时间？
-    comment_time DATETIME,
     primary key(commentator_id,commented_music),
     constraint comment_fk_user foreign key(commentator_id) references user_tb(id),
     constraint comment_fk_music foreign key(commented_music) references music_tb(id)
