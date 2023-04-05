@@ -1,5 +1,3 @@
-use homework;
-
 -- 1. 初始化originData表
 SET @@foreign_key_checks=0;
 DROP TABLE IF EXISTS originData;
