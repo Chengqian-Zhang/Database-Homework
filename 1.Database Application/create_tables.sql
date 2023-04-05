@@ -153,6 +153,19 @@ set @@foreign_key_checks=1;
 -- );
 -- set @@foreign_key_checks=1;
 
+-- 10.创建关注表，记录用户对用户的关注
+-- # 关注（关注用户ID，被关注用户ID，关注时间）
+set @@foreign_key_checks=0;
+drop table if exists follow_tb;
+CREATE TABLE follow_tb
+(   subscriber_id BIGINT NOT NULL,
+    publisher_id BIGINT NOT NULL,
+    follow_time DATE,
+    primary key(subscriber_id,publisher_id),
+    constraint sub_fk_user foreign key(subscriber_id) references user_tb(id),
+    constraint pub_fk_user foreign key(publisher_id) references user_tb(id)
+);
+set @@foreign_key_checks=1;
 
 -- 11. 创建歌曲表，歌曲继承自音乐，需要以音乐的id(music_id)为主键。
 
