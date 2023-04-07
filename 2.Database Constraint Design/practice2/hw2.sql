@@ -24,6 +24,17 @@ CREATE TABLE max_slidingWin
 SET @@foreign_key_checks=1;
 
 -- 3. 初始化sum_slidingWin表
+SET @@foreign_key_checks=0;
+DROP TABLE IF EXISTS sum_slidingWin;
+
+CREATE TABLE sum_slidingWin
+(
+    id BIGINT NOT NULL PRIMARY KEY,
+    value BIGINT NOT NULL,
+    constraint sum_fk_sum_sliding foreign key(id) references originData(id)
+);
+
+SET @@foreign_key_checks=1;
 
 -- 4. 初始化aggResult表
 
