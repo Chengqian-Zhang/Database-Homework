@@ -1,6 +1,5 @@
--- 1. 创建用户表，并检查qq，邮箱，电话之一是否有填写，并检查填写是否合规。
-
 SET @@foreign_key_checks=0;
+-- 1. 创建用户表，并检查qq，邮箱，电话之一是否有填写，并检查填写是否合规。
 
 DROP TABLE IF EXISTS user_tb;
 

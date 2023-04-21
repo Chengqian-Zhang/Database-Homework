@@ -1,4 +1,4 @@
--- 1. 插入用户表数据。
+/* 1. 插入用户表数据。 */
 
 INSERT INTO user_tb (
     level_of_membership, 
