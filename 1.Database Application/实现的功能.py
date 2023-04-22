@@ -337,3 +337,136 @@ try:
     db.commit()
 except:
     db.rollback()
+
+#9.用户增加一条动态，并查看更新前后用户的所有动态
+
+#显示用户1所有动态
+user_id = 1
+sql = (
+    "SELECT * FROM moment_tb "
+    "WHERE id_of_the_moment_creating_user = %s "
+)
+try:
+    cursor.execute(sql, (user_id, ))
+    print("All moment", cursor.fetchall())
+    db.commit()
+except:
+    db.rollback()
+
+#用户1增加一条动态
+new_content = "湖人总冠军"
+new_range_of_share = "粉丝可见"
+new_id_of_the_moment_creating_user = 1
+sql=(
+    "INSERT INTO moment_tb "
+    "(content, range_of_share, id_of_the_moment_creating_user) "
+    "VALUES (%s, %s, %s)"
+)
+try:
+    cursor.execute(sql, (new_content, new_range_of_share, new_id_of_the_moment_creating_user))
+    print("Add new moment", cursor.fetchall())
+    db.commit()
+except:
+    db.rollback()
+    
+#显示增加动态之后用户1的所有动态
+sql = (
+    "SELECT * FROM moment_tb "
+    "WHERE id_of_the_moment_creating_user = %s "
+)
+try:
+    cursor.execute(sql, (user_id, ))
+    print("All moment", cursor.fetchall())
+    db.commit()
+except:
+    db.rollback()
+
+#10.查询用户1所有可见范围为"粉丝可见"的动态
+user_id = 1
+target_range_of_share = "粉丝可见"
+sql = (
+    "SELECT * FROM moment_tb "
+    "WHERE id_of_the_moment_creating_user = %s and range_of_share = %s "
+)
+try:
+    cursor.execute(sql, (user_id, target_range_of_share))
+    print("Moment whose range of share is 粉丝可见:", cursor.fetchall())
+    db.commit()
+except:
+    db.rollback()
+
+#11.将用户所有可见范围为"粉丝可见"的动态修改为"所有人可见"
+new_range_of_share = "所有人可见"
+old_range_of_share = "粉丝可见"
+sql = (
+    "UPDATE moment_tb "
+    "SET range_of_share = %s "
+    "WHERE range_of_share = %s "
+)
+try:
+    cursor.execute(sql, (new_range_of_share, old_range_of_share))
+    print("Update moment_tb:", cursor.fetchall())
+    db.commit()
+except:
+    db.rollback()
+
+#显示所有可见范围为“所有人可见”的动态
+target_range_of_share = "所有人可见"
+sql = (
+    "SELECT * FROM moment_tb "
+    "WHERE range_of_share = %s "
+)
+try:
+    cursor.execute(sql, (target_range_of_share))
+    print("Moment whose range of share is 所有人可见:", cursor.fetchall())
+    db.commit()
+except:
+    db.rollback()
+
+#12.删除可见范围为"所有人可见"的动态的所有评论
+
+#显示所有评论
+sql = (
+    "SELECT * FROM comment_tb "
+)
+try:
+    cursor.execute(sql)
+    print("All comments:", cursor.fetchall())
+    db.commit()
+except:
+    db.rollback()
+    
+sql = (
+    "SELECT * FROM moment_tb "
+)
+try:
+    cursor.execute(sql)
+    print("All moments:", cursor.fetchall())
+    db.commit()
+except:
+    db.rollback()
+
+#删除可见范围为“所有人可见”的动态的所有评论
+delete_range_of_share = "所有人可见"
+sql = (
+    "DELETE  "
+    "FROM comment_tb "
+    "WHERE belong_moment_id in (SELECT id FROM moment_tb WHERE range_of_share = %s )"
+)
+try:
+    cursor.execute(sql, (delete_range_of_share, ))
+    print("Delete the moments whose range of share is 粉丝可见:", cursor.fetchall())
+    db.commit()
+except:
+    db.rollback()
+    
+#显示删除之后的所有评论
+sql = (
+    "SELECT * FROM comment_tb "
+)
+try:
+    cursor.execute(sql)
+    print("All comments:", cursor.fetchall())
+    db.commit()
+except:
+    db.rollback()
