@@ -91,10 +91,10 @@ CREATE TRIGGER updateResult
 AFTER INSERT ON max_slidingWin
 FOR EACH ROW
 BEGIN
-    -- INSERT INTO aggResult(SELECT sum_slidingWin.id, sum_slidingWin.value,max_slidingWin.value
-    --                     FROM sum_slidingWin inner join max_slidingWin
-    --                     ON sum_slidingWin.id=max_slidingWin.id
-    --                     );
-    -- CALL agg(NEW.id);
+    DECLARE ressum INT;
+    DECLARE resmax INT;
+    SELECT sum(value) INTO ressum FROM sum_slidingWin;
+    SELECT value INTO resmax FROM max_slidingWin LIMIT 1;
+    INSERT INTO aggResult(id,sumRes,maxRes) values (NEW.id,ressum,resmax);
 END;
 
