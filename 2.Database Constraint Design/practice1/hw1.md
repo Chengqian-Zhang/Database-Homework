@@ -40,7 +40,9 @@ CREATE TABLE employee_tb
     salary BIGINT,
     level TINYINT,
     email VARCHAR(40) NOT NULL,
+    #正则表达式匹配邮箱格式
     CHECK(regexp_like(email, '^[a-z0-9]+[a-z0-9._-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')),
+    #限定level取值以及与salary的对应关系
     CHECK(level IN (1,2,3,4,5)),
     CHECK(
          ((salary BETWEEN 1000 AND 2000) AND (level=1))
@@ -84,7 +86,7 @@ SET @@foreign_key_checks=1;
 
 
 
-插入数据作为例子
+插入数据作为例子：
 
 
 ```sql
@@ -124,7 +126,7 @@ INSERT INTO department_tb (
 
 
 
-定义外码约束
+定义外码约束：
 
 
 ```sql
@@ -175,7 +177,7 @@ END;
 
 
 
-当员工工资总和大于部门预算的时候，报错
+当员工工资总和大于部门预算的时候，报错：
 
 
 
