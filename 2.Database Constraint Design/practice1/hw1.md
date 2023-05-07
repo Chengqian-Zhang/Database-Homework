@@ -1,3 +1,7 @@
+# 实习二 数据库约束设计
+
+成员：杨仕博 张钧天 马千里 张成谦 
+
 ```python
 %load_ext sql
 ```
@@ -13,11 +17,14 @@ pymysql.install_as_MySQLdb()
 ```python
 %sql use stu2100013111;
 ```
+## 练习一 约束设计
 
+给定员工表和部门表两个关系表，完成主码、外码、取值限制、模式匹配和表间关系等约束设计。
 
-```python
-# 创建员工表和部门表
-```
+我们创建两个关系表，添加相应约束和简单样例，同时展示运行结果。
+
+首先创建员工表和部门表：
+
 
 
 ```sql
@@ -72,18 +79,12 @@ SET @@foreign_key_checks=1;
     0 rows affected.
     0 rows affected.
 
-
-
-
-
     []
 
 
 
 
-```python
-#插入数据作为例子
-```
+插入数据作为例子
 
 
 ```sql
@@ -118,18 +119,12 @@ INSERT INTO department_tb (
     1 rows affected.
     1 rows affected.
 
-
-
-
-
     []
 
 
 
 
-```python
-#定义外码约束
-```
+定义外码约束
 
 
 ```sql
@@ -145,18 +140,14 @@ ADD CONSTRAINT manager_employee FOREIGN KEY(manager) REFERENCES employee_tb(eno)
     1 rows affected.
     1 rows affected.
 
-
-
-
-
     []
 
 
 
 
-```python
-#定义触发器来实现员工工资总和与部门预算的比较：
-```
+
+定义触发器来实现员工工资总和与部门预算的比较：
+
 
 
 ```sql
@@ -179,18 +170,13 @@ END;
      * mysql://stu2100013111:***@162.105.146.37:43306
     0 rows affected.
 
-
-
-
-
     []
 
 
 
 
-```python
-#当员工工资总和大于部门预算的时候，报错
-```
+当员工工资总和大于部门预算的时候，报错
+
 
 
 ```sql
