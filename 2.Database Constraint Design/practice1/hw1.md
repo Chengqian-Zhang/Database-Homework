@@ -40,9 +40,7 @@ CREATE TABLE employee_tb
     salary BIGINT,
     level TINYINT,
     email VARCHAR(40) NOT NULL,
-    #正则表达式匹配邮箱格式
-    CHECK(regexp_like(email, '^[a-z0-9]+[a-z0-9._-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')),
-    #限定level取值以及与salary的对应关系
+    CHECK(email LIKE '[a-zA-Z0-9]@%[-_a-zA-Z0-9.]%'),
     CHECK(level IN (1,2,3,4,5)),
     CHECK(
          ((salary BETWEEN 1000 AND 2000) AND (level=1))
@@ -83,7 +81,13 @@ SET @@foreign_key_checks=1;
 
     []
 
-
+```python
+#%%sql
+#版本不支持正则表达式语法"REGEXP"表达式
+#ALTER TABLE employee_tb ADD CONSTRAINT valid_email CHECK (
+#  email REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+#);
+```
 
 
 插入数据作为例子：
